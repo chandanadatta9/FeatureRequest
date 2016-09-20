@@ -1,3 +1,4 @@
 .pyenv
 app_access_logs.log
 app_log.log
+*.pyc
