@@ -12,7 +12,7 @@ class BaseConfig(object):
 
 class DevelopmentConfig(BaseConfig):
 	DEBUG = True
-
+	SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:hanuman@localhost/development'
 	SECRET_KEY = 'application_development_key_secret'
 
 class LocalConfig(DevelopmentConfig):
@@ -22,7 +22,8 @@ class StagingConfig(DevelopmentConfig):
 	pass
 
 class ProdConfig(DevelopmentConfig):
-	DEBUG = True
+	DEBUG = False
+	PROD = True
 	SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:hanuman@localhost/datta'
 	SQLALCHEMY_TRACK_MODIFICATIONS= False
 
