@@ -1,5 +1,5 @@
 import os
-
+from .constants import INSTANCE_FOLDER_PATH
 
 class BaseConfig(object):
 	PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
@@ -8,8 +8,14 @@ class BaseConfig(object):
 	SQLALCHEMY_TRACK_MODIFICATIONS= False
 	SECRET_KEY = 'application_key_secret'
 	DEBUG = True
+	PROD = False
 	TESTING = False
-
+	SECRET_KEY = 'DEFAULT_SECRET_KEY'
+	try:
+		if not os.path.exists(INSTANCE_FOLDER_PATH):
+			os.mkdir(INSTANCE_FOLDER_PATH)
+	except Exception,e:
+		raise e
 class DevelopmentConfig(BaseConfig):
 	DEBUG = True
 	SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:hanuman@localhost/development'
