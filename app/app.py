@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
+import os
 import base64
 import config as Config
+from constants import INSTANCE_FOLDER_PATH
 from .api.admin.controller import admin
 from logging import INFO, DEBUG, ERROR, handlers, Formatter
 from .api.user.controller import user
@@ -18,16 +20,15 @@ def create_app(config = None, app_name = None, blueprints = None):
 		app_name = Config.DevelopmentConfig.PROJECT
 
 	app = Flask(app_name)
-	config_logging(app)
 	config_app(app,config)
 	config_blueprints(app, blueprints)
 	config_extensions(app)
-	
+	config_logging(app)
 	config_errorhandlers(app)
 	return app
 	
 def config_app(app, config = None):
-	app.config.from_object(Config.DevelopmentConfig)
+	app.config.from_object(Config.LocalConfig)  ## this is the default config that will be loaded.
 	if config:
 		app.config.from_object(Config.load_config(config))
 		return  #prod
@@ -93,7 +94,7 @@ def config_logging(app):
 		return
 	app.logger.setLevel(DEBUG)
 
-	log_location = 'app_log.log'
+	log_location = os.path.join(app.config['LOG_FOLDER'],'appLog.log')
 	info_file_handler = handlers.RotatingFileHandler(log_location, maxBytes = 1024*1024*100, backupCount = 10)
 	info_file_handler.setLevel(DEBUG)
 	info_file_handler.setFormatter(Formatter('%(asctime)s %(levelname)s: %(message)s '
