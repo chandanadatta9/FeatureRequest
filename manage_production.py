@@ -7,7 +7,7 @@ from app import create_app
 from app.config import DevelopmentConfig
 
 def create_my_app(config = None):
-	return create_app(config = PRODUCTION)
+	return create_app(config = 'PRODUCTION')
 
 manager = Manager(create_my_app)
 
