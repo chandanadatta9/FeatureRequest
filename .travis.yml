@@ -1,17 +1,19 @@
 language: python
-
 python:
-  - "2.7"
-
+- '2.7'
 services:
-  - mysql
-
+- mysql
 before_script:
-  - mysql -e 'create database featurerequestapp_test'
-
-#install the required packages from the requirements.txt
+- mysql -e 'create database featurerequestapp_test'
 install:
-  - "pip install -r requirements.txt"
-
+- pip install -r requirements.txt
 script:
-  - nosetests
+- nosetests
+deploy:
+  provider: opsworks
+  access_key_id: AKIAJ2KJASPY6GWG7TLQ
+  secret_access_key:
+    secure: ExaY1q/Pbsf48qT73YTrIYSYcAvMUimK/r8r6UOR0sW6bF2fOMDjg59yYj1kbPiqtJoeScV2vpc5j2pauOTUBA3mP4dIo1zrLtPIVWlxrg4yCPSj4cT0dKNo6Hfm89xyFFyoRUu4SUxzJNkxUvvaLIpPYS4w0sxLtngP0AwUr5CT8DWsM148sDh/TjP4SHgSGnxlzboMOIMIJ11MiVabwut4KRjakBFh2ML7FxLRlsjRvU5AyegC+JnoxO8HXKB4fIgGUaKid2AiZjuvlBNkmB+1kvnvFL3+J/s2tZ1u92bdB85feizfxCKvZTH6uSF4FDzDBapY8NjVqIFPNqR2K8iHX5NohtUEpbX+oWimA07moIU4f1xJbiuIN/dBKr271jNYAnWfqJV9f5r33UOdaz/lZTXg+2u2YwZWcC0gzgQwvS0BeERTCDy9TVK7jQcaam7apWhsa3X0hFr1A1qEK4vZiP6HPLnMiWEmeFLqfbgA+cNnmW9GNdIzXvo1Vsl81dzO8RzKsIxov/gnEIZV1oUJ9YsGuEKSLmcNU5KKLui+1cF63jVtkzUWGmQbFbHECyskPBec5qz8qfB4w4fPWrtwpiQSIdcUmdOkVZKaKbz+ZM+BqWbMS/1uOwaMJJolakbo4D5r4ahB+6qR3dMPJblpTr5UGnEQgiltXSK/stg=
+  app-id: 4cf140f4-88ab-4655-a304-66a825a334ff
+  on:
+    repo: chandanadatta9/FeatureRequest
