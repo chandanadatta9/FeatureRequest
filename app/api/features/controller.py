@@ -1,7 +1,8 @@
 from flask import Flask, flash, redirect, session, url_for, request, render_template,jsonify, Blueprint, current_app
 from flask_login import login_user,logout_user, current_user, login_required, LoginManager
 from ...extensions import db, ma, login_manager
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, Date, DateTime
+import datetime
 from sqlalchemy.orm import sessionmaker
 from ...database_initialize import Users,Clients, Projects, Requests
 import base64
@@ -26,6 +27,7 @@ def requestProcess():
 		resp.status_code = 201
 		return resp
 	elif request.method == 'POST':
+		#print 'enters this loop'
 		if request.json.get('clientname') is not None and db.session.query(Requests).filter(Requests.clientname == request.json.get('clientname')).first() :
 			priorities = db.session.query(Requests).filter(Requests.clientname == request.json.get('clientname')).filter(Requests.clientPriority >= request.json.get('clientPriority'))
 			currentPriorities = []
@@ -37,6 +39,8 @@ def requestProcess():
 				idsForPriorities.append(priority.requestID)
 			currentPrioritiesSorted = [currentPrioritiesTemp for currentPrioritiesTemp, idsForPrioritiesTemp in sorted(zip(currentPriorities,idsForPriorities))]
 			idsForPrioritiesSorted = [idsForPrioritiesTemp for currentPrioritiesTemp,idsForPrioritiesTemp in sorted(zip(currentPriorities,idsForPriorities))]
+			#print currentPrioritiesSorted
+			#print idsForPrioritiesSorted
 			hasInserted = 0
 			newClientPriority = 0
 			newPriorityRequested = request.json.get('clientPriority')
@@ -52,7 +56,6 @@ def requestProcess():
 				requestValues.ticketURL = url_for('features.get_request', requestID = requestValues.requestID)
 				db.session.add(requestValues)
 				db.session.commit()
-				
 				resp = jsonify({"message":"Request Created",
 								"requestID":requestValues.requestID,
 								"requestURL":requestValues.ticketURL})
@@ -70,7 +73,12 @@ def requestProcess():
 						db.session.add(updateRequest)
 						db.session.commit()
 						if hasInserted == 0:
+							#print "also into this"
+							valueIDMax = db.session.execute("SELECT max(requestID) FROM Requests")
+
 							requestValues, errors = request_schema.load(request.get_json())
+							#for ivalue in valueIDMax:
+								#requestValues.requestID = ivalue[0] + 1
 							if errors:
 								current_app.logger.info('error occured while creating the request ' )
 								resp = jsonify(errors)
@@ -88,8 +96,12 @@ def requestProcess():
 							hasInserted = 1
 						newPriorityRequested = newClientPriority
 					elif newPriorityRequested < currentPrioritiesSorted[i]:
+						#print "into this loop #########################"
 						if hasInserted == 0:
+							#valueIDMax = db.session.execute("SELECT max(requestID) FROM Requests")
 							requestValues, errors = request_schema.load(request.get_json())
+							#for ivalue in valueIDMax:
+								#requestValues.requestID = ivalue[0] + 1
 							if errors:
 								current_app.logger.info('error occured while creating the request ' )
 								resp = jsonify(errors)
@@ -108,9 +120,13 @@ def requestProcess():
 						else:
 							pass
 					elif newPriorityRequested > currentPrioritiesSorted[i]:
+						#print 'also into this'
 						if i == len(currentPrioritiesSorted):
 							if hasInserted == 0:
+								valueIDMax = db.session.execute("SELECT max(requestID) FROM Requests")
 								requestValues, errors = request_schema.load(request.get_json())
+								#for ivalue in valueIDMax:
+									#requestValues.requestID = ivalue[0] + 1
 								if errors:
 									current_app.logger.info('error occured while creating the request ' )
 									resp = jsonify(errors)

@@ -25,9 +25,10 @@ class DevelopmentConfig(BaseConfig):
 	DATABASE_NAME = os.environ.get('DATABASE_DEVELOPMENT_NAME','')
 	DATABASE_USER = os.environ.get('DATABASE_USER','')
 	DATABASE_HOST = os.environ.get('DATABASE_HOST','')
+	SQLALCHEMY_ECHO = True
 	DATABASE_PASSWORD = os.environ.get('DATABASE_PASSWORD','')
 	SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://'+DATABASE_USER+':'+DATABASE_PASSWORD+'@'+DATABASE_HOST+'/'+DATABASE_NAME
-	SQLALCHEMY_TRACK_MODIFICATIONS= False
+	SQLALCHEMY_TRACK_MODIFICATIONS= True
 	SECRET_KEY = 'application_development_key_secret'
 
 class LocalConfig(BaseConfig):
@@ -35,8 +36,9 @@ class LocalConfig(BaseConfig):
 	DATABASE_USER = os.environ.get('DATABASE_USER','')
 	DATABASE_HOST = os.environ.get('DATABASE_HOST','')
 	DATABASE_PASSWORD = os.environ.get('DATABASE_PASSWORD','')
+	SQLALCHEMY_ECHO = True
 	SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://'+DATABASE_USER+':'+DATABASE_PASSWORD+'@'+DATABASE_HOST+'/'+DATABASE_NAME
-	SQLALCHEMY_TRACK_MODIFICATIONS= False
+	SQLALCHEMY_TRACK_MODIFICATIONS= True
 
 class ProdConfig(DevelopmentConfig):
 	DEBUG = False

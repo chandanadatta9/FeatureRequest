@@ -42,6 +42,7 @@ def config_extensions(app):
 	ma.init_app(app)
 	with app.app_context():
 		db.create_all()
+		db.session.commit()
 	@login_manager.request_loader
 	def load_user(request):
 		authorization = request.headers.get('Authorization')
