@@ -14,10 +14,10 @@ admin = Blueprint('admin',__name__, url_prefix = '/api/admin')
 def update_request(requestID):
 	if request.method == 'PUT':
 		if (request.json.get('clientPriority') is not None):
-			print "******************************"
-			print Requests.requestID
+			#print "******************************"
+			#print Requests.requestID
 			requestUpdate = db.session.query(Requests).filter(Requests.requestID == requestID).first()
-			print requestUpdate.clientname
+			#print requestUpdate.clientname
 			priorities = db.session.query(Requests).filter(Requests.clientname == requestUpdate.clientname)
 			currentPriorities = []
 			idsForPriorities = []
@@ -28,8 +28,8 @@ def update_request(requestID):
 				idsForPriorities.append(priority.requestID)
 			currentPrioritiesSorted = [currentPrioritiesTemp for currentPrioritiesTemp, idsForPrioritiesTemp in sorted(zip(currentPriorities,idsForPriorities))]
 			idsForPrioritiesSorted = [idsForPrioritiesTemp for currentPrioritiesTemp,idsForPrioritiesTemp in sorted(zip(currentPriorities,idsForPriorities))]
-			print currentPrioritiesSorted
-			print idsForPrioritiesSorted
+			#print currentPrioritiesSorted
+			#print idsForPrioritiesSorted
 			hasInserted = 0
 			newClientPriority = 0
 			newPriorityRequested = request.json.get('clientPriority')
@@ -50,7 +50,7 @@ def update_request(requestID):
 					if (idsForPrioritiesSorted[i] == requestUpdate.requestID):
 						continue
 					if newPriorityRequested == currentPrioritiesSorted[i]:
-						print 'entered this loop'
+						#print 'entered this loop'
 						newClientPriority = currentPrioritiesSorted[i] + 1
 						updateRequest = db.session.query(Requests).filter(Requests.requestID == idsForPrioritiesSorted[i]).first()
 						updateRequest.clientPriority = newClientPriority
@@ -141,7 +141,7 @@ def update_request(requestID):
 				#db.session.close()
 				#session.bind.dispose()
 		else:
-			print "okay in this loop"
+			#print "okay in this loop"
 			requestUpdate = db.session.query(Requests).filter(Requests.requestID == requestID).first()
 			
 			if request.json.get('requestTitle') is not None:
